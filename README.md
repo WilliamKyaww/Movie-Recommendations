@@ -1,6 +1,23 @@
 # Welcome to StackEdit!
 
 lorem ipsum
+### Step 3: Computing Movie Similarities
+
+To recommend movies, we need to find how similar two movies are based on user ratings. We use **cosine similarity**, which measures how close two movies are in rating patterns. 
+
+- **Cosine Similarity Formula**:  
+  \[
+  \cos(\theta) = \frac{A \cdot B}{||A|| \times ||B||}
+  \]
+  where **A** and **B** are rating vectors for two movies.
+
+- **Key Steps:**
+  1. Extract user ratings for each movie.
+  2. Compute cosine similarity between every pair of movies.
+  3. Store these values in a **similarity matrix** for quick lookup.
+
+This similarity matrix helps in predicting user ratings based on movies they have already rated.
+
 
 # Files
 
