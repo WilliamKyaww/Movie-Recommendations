@@ -10,6 +10,9 @@ As a novice coder and an AI/ML enthusiast I have used my opportunity to
 The reason why there are a lot of markdown cells is so that I understand more of why I did what I did. 
 
 
+Throughout this project, I've adopted a cell-specific import strategy, introducing libraries at the point of use rather than consolidating all imports at the beginning. This deliberate choice enhances the educational value of the notebook by clearly demonstrating which libraries are required for each specific functionality, making it easier to understand the dependencies for individual operations. As this project serves primarily as an exploration and learning exercise, this approach provides better context for anyone reviewing or learning from the code.
+
+
 Technology used:
 vscode
 jupyter notebook
@@ -42,7 +45,43 @@ Audience rating dataset downloaded from
 
 ## Switch to another file
 
-lorem ipsum
+# IMDB Movie Dataset
+
+This document provides an overview of our merged movie dataset containing information from IMDB.
+
+## Dataset Structure
+
+The dataset combines movie basics, ratings, and crew information with the following columns:
+
+| Column | Description |
+|--------|-------------|
+| tconst | Unique identifier for each title |
+| isAdult | Flag indicating adult content (0 = no, 1 = yes) |
+| startYear | Year of release |
+| genres | Comma-separated list of genres |
+| runtimeMinutes | Length of the movie in minutes |
+| averageRating | Average user rating (scale of 1-10) |
+| directors | Comma-separated list of director IDs |
+| writers | Comma-separated list of writer IDs |
+
+## Sample Data
+
+Below is a sample of the merged dataset:
+
+| tconst | isAdult | startYear | genres | runtimeMinutes | averageRating | directors | writers |
+|--------|---------|-----------|--------|---------------|--------------|-----------|---------|
+| tt0002130 | 0 | 1911 | Adventure,Drama,Fantasy | 71 | 7.0 | nm0078205,nm0655824,nm0209738 | nm0019604 |
+| tt0002423 | 0 | 1919 | Biography,Drama,Romance | 113 | 6.6 | nm0523932 | nm0266183,nm0473134 |
+| tt0002844 | 0 | 1913 | Crime,Drama | 54 | 6.9 | nm0275421 | nm0019855,nm0275421,nm0816232 |
+| tt0003014 | 0 | 1913 | Drama | 96 | 7.0 | nm0803705 | nm0472236,nm0803705 |
+| tt0003037 | 0 | 1913 | Crime,Drama | 61 | 6.9 | nm0275421 | nm0019855,nm0275421,nm0816232 |
+| tt0003165 | 0 | 1913 | Crime,Drama,Mystery | 90 | 6.9 | nm0275421 | nm0019855,nm0275421,nm0816232 |
+
+## Notes
+
+- Director and writer IDs (starting with "nm") can be cross-referenced with the IMDB name database to get actual names
+- The dataset has been cleaned and merged from multiple IMDB source files
+- All adult content is flagged for appropriate filtering
 
 ## Rename a file
 
