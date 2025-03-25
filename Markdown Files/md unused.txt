@@ -1,3 +1,18 @@
+first version of md:
+
+This is NOT completed by following any tutorial, but completed and actively self-learned with the help of LLMs.
+
+As a novice programmer and an AI/ML enthusiast I have used my opportunity to enrich my understand of machine learning technologies 
+The reason why there are a lot of markdown cells is so that I understand more of why I did what I did. 
+
+ As this project serves primarily as an exploration and learning exercise, this approach provides better context for anyone reviewing or learning from the code.
+
+Throughout the project, I've adopted a cell-specific import strategy, where libraries are introduced at the point of use rather than consolidating all imports at the beginning. This is for self learninig/educational value for myself so I can understand which libraries are required for which specific functionality. This makes it easier to understand the dependencies for individual operations.
+
+I've also incorporated mark down cells before to explain the function and rationale of the revelant code that comes before or after these explanatory sections. I tried my best to be concise while also explaining the relevant information to avoid underexplaining important and hard-to-understand topics, as well as not to overexplain easy to understand basic topics.  
+
+
+
 ## SmartyPants
 
 SmartyPants converts ASCII punctuation characters into "smart" typographic punctuation HTML entities. For example:

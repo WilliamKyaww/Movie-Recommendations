@@ -1,16 +1,14 @@
 # Welcome to my Movie Recommendation System!
 
-This is NOT completed by following any tutorial, but completed and actively self-learned with the help of LLMs.
+This project was not completed by following a tutorial but was actively self-learned with the help of LLMs.
 
-As a novice programmer and an AI/ML enthusiast I have used my opportunity to enrich my understand of machine learning technologies 
-The reason why there are a lot of markdown cells is so that I understand more of why I did what I did. 
+As a novice programmer and AI/ML enthusiast, I took this opportunity to deepen my understanding of machine learning technologies, techniques, and approaches. 
 
- As this project serves primarily as an exploration and learning exercise, this approach provides better context for anyone reviewing or learning from the code.
+The numerous markdown cells help me document my thought process and reasoning. Since this project is primarily a learning exercise, this approach also provides better context for anyone reviewing the code.
 
-Throughout the project, I've adopted a cell-specific import strategy, where libraries are introduced at the point of use rather than consolidating all imports at the beginning. This is for self learninig/educational value for myself so I can understand which libraries are required for which specific functionality. This makes it easier to understand the dependencies for individual operations.
+I used a cell-specific import strategy, introducing libraries where needed instead of consolidating them at the beginning. This helps me understand which libraries are required for specific functions and makes dependencies clearer.
 
-I've also incorporated mark down cells before to explain the function and rationale of the revelant code that comes before or after these explanatory sections. I tried my best to be concise while also explaining the relevant information to avoid underexplaining important and hard-to-understand topics, as well as not to overexplain easy to understand basic topics.  
-
+Additionally, I included markdown explanations before relevant code sections. I aimed to be concise, to avoid over-explaining simple concepts while ensuring clarity for more complex topics.
 
 
 **Technology used**:
