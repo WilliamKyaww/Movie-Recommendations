@@ -34,8 +34,7 @@ Files downloaded from: https://datasets.imdbws.com/
 Dataset information: https://developer.imdb.com/non-commercial-datasets/
 
 
-### **title.basics.tsv.gz**[![](https://developer.imdb.com/icons/anchorIcon.svg)](https://developer.imdb.com/non-commercial-datasets/#titlebasicstsvgz)
-
+### **title.basics.tsv.gz**
 -   tconst (string) - alphanumeric unique identifier of the title
 -   titleType (string) – the type/format of the title (e.g. movie, short, tvseries, tvepisode, video, etc)
 -   primaryTitle (string) – the more popular title / the title used by the filmmakers on promotional materials at the point of release
@@ -46,14 +45,12 @@ Dataset information: https://developer.imdb.com/non-commercial-datasets/
 -   runtimeMinutes – primary runtime of the title, in minutes
 -   genres (string array) – includes up to three genres associated with the title
 
-### **title.crew.tsv.gz**[![](https://developer.imdb.com/icons/anchorIcon.svg)](https://developer.imdb.com/non-commercial-datasets/#titlecrewtsvgz)
-
+### **title.crew.tsv.gz**
 -   tconst (string) - alphanumeric unique identifier of the title
 -   directors (array of nconsts) - director(s) of the given title
 -   writers (array of nconsts) – writer(s) of the given title
 
-### **title.ratings.tsv.gz**[![](https://developer.imdb.com/icons/anchorIcon.svg)](https://developer.imdb.com/non-commercial-datasets/#titleratingstsvgz)
-
+### **title.ratings.tsv.gz**
 -   tconst (string) - alphanumeric unique identifier of the title
 -   averageRating – weighted average of all the individual user ratings
 -   numVotes - number of votes the title has received
