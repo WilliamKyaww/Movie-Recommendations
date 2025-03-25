@@ -1,4 +1,4 @@
-# Welcome to StackEdit!
+# Welcome to my Movie Recommendation System!
 
 This is NOT completed by following any tutorial, but completed and actively self-learned with the help of LLMs.
 
