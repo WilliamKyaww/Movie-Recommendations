@@ -129,6 +129,35 @@ include tables
 
 include graphs
 
+cell 3 original code:
+
+'''python
+
+from numpy.linalg import norm
+
+# Compute cosine similarity manually
+def cosine_similarity(movie1, movie2):
+    dot_product = np.dot(movie1, movie2)
+    norm_product = norm(movie1) * norm(movie2)
+    return dot_product / norm_product if norm_product != 0 else 0
+
+# Create similarity matrix based on the training set
+num_movies = train_array.shape[1]
+similarity_matrix_train = np.zeros((num_movies, num_movies))
+
+for i in range(num_movies):
+    for j in range(num_movies):
+        similarity_matrix_train[i, j] = cosine_similarity(train_array[:, i], train_array[:, j])
+
+# Convert to DataFrame
+movie_similarity_train_df = pd.DataFrame(similarity_matrix_train, index=train_matrix.columns, columns=train_matrix.columns)
+
+'''
+The above cell block takes around 30 minutes to run which is far too long, while the code below uses the cosine_similarity function from the sklearn library. This does the exact same thing while only taking just over a second to execute. 
+
+My original code manually computes cosine similarity using loops, which is inefficient for large datasets.
+cosine_similarity(train_array.T) from sklearn performs the same computation in a highly optimised way using matrix operations.
+
 # 4. Content Based Filtering
 
 # 5. Hybrid Filtering
