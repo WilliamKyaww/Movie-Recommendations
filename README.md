@@ -152,12 +152,20 @@ for i in range(num_movies):
 # Convert to DataFrame
 movie_similarity_train_df = pd.DataFrame(similarity_matrix_train, index=train_matrix.columns, columns=train_matrix.columns)
 
-'''
-The above cell block takes around 30 minutes to run which is far too long, while the code below uses the cosine_similarity function from the sklearn library. This does the exact same thing while only taking just over a second to execute. 
+```
+The above cell block takes around 30 minutes to run which is far too long. My original code manually computes cosine similarity using loops, which is inefficient for large datasets.
 
-My original code manually computes cosine similarity using loops, which is inefficient for large datasets.
-cosine_similarity(train_array.T) from sklearn performs the same computation in a highly optimised way using matrix operations.
+To improve the runtime, I refacted that entire code cell by using the ```cosine_similarity``` function from the scikit-learn library. ```cosine_similarity(train_array.T)``` performs the same computation, but in a highly optimised way using matrix operations.
 
+This updated code took less than a second to execute. 
+```python
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Compute similarity matrix in one step
+similarity_matrix_train = cosine_similarity(train_array.T)
+
+# Convert to DataFrame
+movie_similarity_train_df = pd.DataFrame(similarity_matrix_train, index=train_matrix.columns, columns=train_matrix.columns)
 ```
 
 # 4. Content Based Filtering
