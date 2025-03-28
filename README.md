@@ -131,7 +131,7 @@ include graphs
 
 cell 3 original code:
 
-'''python
+```python
 
 from numpy.linalg import norm
 
@@ -157,6 +157,8 @@ The above cell block takes around 30 minutes to run which is far too long, while
 
 My original code manually computes cosine similarity using loops, which is inefficient for large datasets.
 cosine_similarity(train_array.T) from sklearn performs the same computation in a highly optimised way using matrix operations.
+
+```
 
 # 4. Content Based Filtering
 
