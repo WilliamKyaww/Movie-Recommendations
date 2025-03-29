@@ -162,6 +162,127 @@ cosine_similarity(train_array.T) from sklearn performs the same computation in a
 
 # 4. Content Based Filtering
 
+last cell of content based filtering:
+```python
+# Optional: Save the TF-IDF model and matrix for future use
+# This allows you to load the model later without recalculating
+import pickle
+
+# Save the TF-IDF vectorizer
+with open('movie_tfidf_vectorizer.pkl', 'wb') as f:
+    pickle.dump(tfidf, f)
+
+# Save only features (not the full similarity matrix) to save space
+# For very large datasets, consider not saving the matrix at all
+sample_size_to_save = min(5000, len(df_movie))
+if len(df_movie) > sample_size_to_save:
+    # Save a sample of the matrix
+    indices_to_save = np.random.choice(len(df_movie), size=sample_size_to_save, replace=False)
+    np.save('movie_tfidf_sample_matrix.npy', tfidf_matrix[indices_to_save].toarray())
+    np.save('movie_sample_indices.npy', indices_to_save)
+else:
+    # Save the full matrix if it's reasonably sized
+    np.save('movie_tfidf_matrix.npy', tfidf_matrix.toarray())
+
+print("Models saved for future use.")
+```
+
+## **What is TF-IDF?**  
+
+TF-IDF (Term Frequency-Inverse Document Frequency) is a technique used to **convert text into numerical values**, making it useful for tasks like search engines, document similarity, and recommendation systems.
+
+---
+
+### **1. Term Frequency (TF)**  
+- Measures how **frequent** a word appears in a document.
+- Formula:  
+  
+  TF = (Number of times a word appears in a document) / (Total number of words in the document)
+  
+- Example:  
+  - In the movie **"Action Thriller Adventure"**, the word **"Action"** appears **once**.
+  - If the total words in the movie description are **3**, then:  
+
+    TF(Action) = 1 / 3 = 0.33
+
+
+### **2. Inverse Document Frequency (IDF)**  
+- Measures how **important** a word is by checking how many documents contain it.
+- Formula:  
+  ```
+  IDF = log(Total number of documents / Number of documents containing the word)
+  ```
+- If a word appears in **many** documents, its importance is **low** (common words like *"the"* or *"movie"* should not be weighted heavily).
+- If a word appears in **fewer** documents, its importance is **high** (unique words like *"sci-fi"* are more meaningful).
+
+---
+
+### **Final TF-IDF Score**
+The final **TF-IDF score** is calculated by multiplying **TF × IDF**:
+```  
+TF-IDF = TF × IDF  
+```
+- **High TF-IDF** means the word is **important** in this document but **rare across all documents**.
+- **Low TF-IDF** means the word is **common across many documents**, so it's **less important**.
+
+---
+
+### **Why Use TF-IDF?**
+- Filters out common words and keeps meaningful ones 
+- Improves search engines
+- Essential for recommendation systems
+
+---
+
+### **Example:**
+If there are movies with **genres, directors, and writers**, TF-IDF will assign **higher importance** to unique words like *"Sci-Fi"* or *"Christopher Nolan"* while **reducing the weight** of common words like *"Drama"*.
+
+### Cell 4:
+
+**1. Importing TF-IDF Vectorizer**
+
+```python 
+from sklearn.feature_extraction.text import TfidfVectorizer
+```
+```TfidfVectorizer``` is used to convert text data (```content_features```) into a matrix of numerical values for similarity calculations.
+
+**2. Initialising the TF-IDF Vectorizer**
+   
+```python
+tfidf = TfidfVectorizer(stop_words='english')
+```
+
+```stop_words='english```' removes common English words (such as "the", "and", "is") that don’t add value for similarity.
+
+**3. Transforming Content into a TF-IDF Matrix**
+
+```python
+tfidf_matrix = tfidf.fit_transform(df_movie['content_features'].fillna(''))
+```
+
+- ```fit_transform()``` learns the vocabulary and creates vectors for each movie.
+- ```fillna('')``` ensures missing values (NaN) are replaced with empty strings (honestly this bit isn't needed).
+
+**4. Printing Matrix Shape**
+
+```python
+print(f"TF-IDF matrix shape: {tfidf_matrix.shape}")
+```
+For example, if the output is (10000, 5000), then 10000 would be the number of movies while 5000 wold be the number of unique words (features).
+
+**5. Printing Feature Count**
+```python
+print(f"Number of features: {len(tfidf.get_feature_names_out())}")
+```
+Retrieves the number of unique words used in the TF-IDF matrix.
+
+### Conclusion
+Converts text data into numerical form, allowing us to calculate movie similarity scores.
+
+TF-IDF gives higher weight to important words and lower weight to common words.
+
+This matrix will be used next for cosine similarity calculations (to recommend similar movies).
+
 # 5. Hybrid Filtering
 
 # 6. GUI
