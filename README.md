@@ -1,13 +1,12 @@
 # Welcome to my Movie Recommendation System!
 
-This project was not completed by following a tutorial but was actively self-learned with the help of LLMs.
+This project was **not** completed by following a tutorial but was actively self-learned with the help of LLMs.
 
 That being said, the AI generated sections of the code has been rigously checked, understood, documented and re-factored multiple times to my satisfaction. This ensures I fully understand what the code cell does and why, and avoids unnecessary noise sometimes created by LLMs. 
 
 As a novice programmer and AI/ML enthusiast, I took this opportunity to deepen my understanding of machine learning technologies, techniques, and approaches. 
 
-
-Additionally, I included markdown explanations before relevant code sections. These help me document my thought process and reasoning, as welll as providing better context for anyone reviewing the code. I aimed to be concise, to avoid over-explaining simple concepts while ensuring clarity for more complex topics.
+Additionally, I included markdown explanations before relevant code sections. These help me document my thought process and reasoning, as well as providing better context for anyone reviewing the code. I aimed to be concise, to avoid over-explaining simple concepts while ensuring clarity for more complex topics.
 
 I used a cell-specific import strategy, introducing libraries where needed instead of consolidating them at the beginning. This helps me understand which libraries are required for specific functions and makes dependencies clearer.
 
@@ -152,12 +151,20 @@ for i in range(num_movies):
 # Convert to DataFrame
 movie_similarity_train_df = pd.DataFrame(similarity_matrix_train, index=train_matrix.columns, columns=train_matrix.columns)
 
-'''
-The above cell block takes around 30 minutes to run which is far too long, while the code below uses the cosine_similarity function from the sklearn library. This does the exact same thing while only taking just over a second to execute. 
+```
+The above cell block takes around 30 minutes to run which is far too long. My original code manually computes cosine similarity using loops, which is inefficient for large datasets.
 
-My original code manually computes cosine similarity using loops, which is inefficient for large datasets.
-cosine_similarity(train_array.T) from sklearn performs the same computation in a highly optimised way using matrix operations.
+To improve the runtime, I refacted that entire code cell by using the ```cosine_similarity``` function from the scikit-learn library. ```cosine_similarity(train_array.T)``` performs the same computation, but in a highly optimised way using matrix operations.
 
+This updated code took less than a second to execute. 
+```python
+from sklearn.metrics.pairwise import cosine_similarity
+
+# Compute similarity matrix in one step
+similarity_matrix_train = cosine_similarity(train_array.T)
+
+# Convert to DataFrame
+movie_similarity_train_df = pd.DataFrame(similarity_matrix_train, index=train_matrix.columns, columns=train_matrix.columns)
 ```
 
 # 4. Content Based Filtering
