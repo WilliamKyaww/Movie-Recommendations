@@ -290,6 +290,127 @@ TF-IDF gives higher weight to important words and lower weight to common words.
 
 This matrix will be used next for cosine similarity calculations (to recommend similar movies).
 
+## **TF-IDF Representation**
+
+The **`tfidf_matrix`** is a **sparse matrix** that represents each movie as a vector of **word importance scores**. Each row corresponds to a movie, and each column represents a unique word (feature).
+
+### **Example**
+
+Let's say we have **3 movies** with the following `content_features`:
+
+| Movie | Content Features                              |
+|-------|----------------------------------------------|
+| M1    | "Action Sci-Fi Adventure Nolan highly_rated" |
+| M2    | "Drama Romance Spielberg moderately_rated"  |
+| M3    | "Action War Sci-Fi Cameron average_rated"   |
+
+
+### **Step 1: Unique Words in the Dataset (Vocabulary)**
+
+After applying `TfidfVectorizer`, the **unique words** (features) in our dataset are:
+
+| Index | Word (Feature)     |
+|-------|--------------------|
+| 0     | action            |
+| 1     | adventure         |
+| 2     | cameron           |
+| 3     | drama             |
+| 4     | highly_rated      |
+| 5     | moderately_rated  |
+| 6     | nolan             |
+| 7     | romance           |
+| 8     | sci-fi            |
+| 9     | spielberg         |
+| 10    | war               |
+| 11    | average_rated     |
+
+
+### **Step 2: TF-IDF Matrix Representation**
+
+The **`tfidf_matrix`** will look something like this:
+
+| Movie | Action | Adventure | Cameron | Drama | Highly Rated | Moderately Rated | Nolan | Romance | Sci-Fi | Spielberg | War  | Average Rated |
+|-------|--------|-----------|---------|-------|--------------|------------------|-------|---------|--------|-----------|------|---------------|
+| M1    | 0.45   | 0.50      | 0.00    | 0.00  | 0.55         | 0.00             | 0.60  | 0.00    | 0.40   | 0.00      | 0.00 | 0.00          |
+| M2    | 0.00   | 0.00      | 0.00    | 0.50  | 0.00         | 0.60             | 0.00  | 0.55    | 0.00   | 0.50      | 0.00 | 0.00          |
+| M3    | 0.40   | 0.00      | 0.55    | 0.00  | 0.00         | 0.00             | 0.00  | 0.00    | 0.45   | 0.00      | 0.50 | 0.60          |
+
+
+### Step 3: Understanding the Values
+
+-   **Higher TF-IDF value** means **more important** word for that movie.
+    
+-   Example:
+    
+	   -   M1 (**Action Sci-Fi Adventure Nolan highly_rated**) has a high value for **"Nolan" (0.60)** and **"Highly Rated" (0.55)**. 
+            
+    -   M3 **(Action War Sci-Fi Cameron average_rated)** has a high value for **"Cameron" (0.55)** and **"Average Rated" (0.60)**.
+            
+
+### **Using TF-IDF?**
+
+Now that every movie is a **numerical vector**, we can:
+
+1.  Compute similarity between movies (using **cosine similarity**).
+    
+2.  Find the most similar movies to a given one.
+    
+3.  Make recommendations.
+    
+```python
+
+
+```
+
+
+
+
+
+
+----------
+
+
+## **Cosine Similarity**
+
+For example, say we have **5 movies**, then our **cosine similarity matrix (`cosine_sim`)** might look like this:
+
+- M1 - Action, Sci-Fi
+- M2 - Action, Adventure
+- M3 - Drama, Romance
+- M4 - Historical, Drama
+- M5 - Drama, Biography
+
+| Movie ID                | M1   | M2   | M3   | M4   | M5   |
+|-------------------------|------|------|------|------|------|
+| **M1**       | 1.00 | 0.85 | 0.30 | 0.10 | 0.20 |
+| **M2**    | 0.85 | 1.00 | 0.40 | 0.15 | 0.25 |
+| **M3**       | 0.30 | 0.40 | 1.00 | 0.60 | 0.50 |
+| **M4**    | 0.10 | 0.15 | 0.60 | 1.00 | 0.75 |
+| **M5**     | 0.20 | 0.25 | 0.50 | 0.75 | 1.00 |
+
+
+-   **Diagonal values = 1.00** as every movie is 100% similar to itself.
+    
+-   M1 **(Action, Sci-Fi)** & M2 **(Action, Adventure)** = **0.85**, as these two are very similar (both action movies).
+    
+-   M1 **(Action, Sci-Fi)** & M3 **(Drama, Romance)** = **0.30**, these are not very similar.
+    
+-   M4 **(Historical, Drama)** & M5 **(Drama, Biography)** = **0.75** as both are Drama-related, so they have high similarity. 
+    
+
+### **Using Cosine Similarity?**
+
+If a user likes **Movie M2 (Action, Adventure)**:
+
+1.  Find the **row for M2**: `[0.85, 1.00, 0.40, 0.15, 0.25]`
+    
+2.  Sort it in **descending order**: `M1 (0.85) → M3 (0.40) → M5 (0.25) → M4 (0.15)`
+    
+3.  Recommend the **top similar movies**: M1 (Action, Sci-Fi), then M3 (Drama, Romance).
+    
+
+
+
 # 5. Hybrid Filtering
 
 # 6. GUI
