@@ -410,6 +410,185 @@ If a user likes **Movie M2 (Action, Adventure)**:
     
 
 
+### Cell 6:
+
+Before:
+```python
+# Function to get movie recommendations
+def get_recommendations(movie_id, cosine_sim_matrix, df, indices=None, top_n=10):
+
+    # Get the index of the movie in our dataframe
+    if indices is not None:
+        # When using a sample of movies
+        if movie_id not in df.loc[indices, 'tconst'].values:
+            print(f"Movie {movie_id} not in the sample. Try another movie ID.")
+            return pd.DataFrame()
+        idx = df.loc[indices].index[df.loc[indices, 'tconst'] == movie_id].tolist()[0]
+        # Map the index to position in cosine_sim_matrix
+        idx_pos = np.where(indices == idx)[0][0]
+    else:
+        # When using all movies
+        if movie_id not in df['tconst'].values:
+            print(f"Movie {movie_id} not found in the dataset.")
+            return pd.DataFrame()
+        idx = df.index[df['tconst'] == movie_id].tolist()[0]
+        idx_pos = idx
+    
+    # Get similarity scores for all movies with the target movie
+    sim_scores = list(enumerate(cosine_sim_matrix[idx_pos]))
+    
+    # Sort movies based on similarity scores
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    
+    # Get the scores of the top_n most similar movies (excluding the movie itself)
+    sim_scores = sim_scores[1:top_n+1]
+    
+    # Get the indices of recommended movies
+    if indices is not None:
+        # When using a sample
+        movie_positions = [i[0] for i in sim_scores]
+        recommended_indices = [indices[pos] for pos in movie_positions]
+    else:
+        # When using all movies
+        recommended_indices = [i[0] for i in sim_scores]
+    
+    # Return the top N movies
+    columns_to_return = ['tconst', 'genres', 'startYear', 'averageRating', 'runtimeMinutes', 'directors', 'tags']
+    columns_to_return = [col for col in columns_to_return if col in df.columns]
+    
+    return df.iloc[recommended_indices][columns_to_return]
+
+
+```
+However, as I won't be working with a subset of movies, I refactored to code to exclude the section that checks if the movie exists in that sample.
+
+Changes & Optimizations
+- Removed indices handling since you're using the full dataset.
+- Simplified movie index retrieval (directly using .values).
+- Kept only necessary parts (no subset logic).
+- Ensured only existing columns are returned (prevents errors).
+
+
+cell 6:
+Parameters:
+- movie_id (str): The unique ID (tconst) of the movie to find recommendations for
+- cosine_sim_matrix (numpy.ndarray): Cosine similarity matrix
+- df (pandas.DataFrame): DataFrame containing the movie dataset
+- top_n (int): Number of recommendations to return (set to 10 as default)
+
+```python
+def get_recommendations(movie_id, cosine_sim_matrix, df, top_n=10):
+```
+Returns:
+- pandas.DataFrame: Top N recommended movies
+
+
+### 1. Function Definition and Initial Check
+
+```python
+def get_recommendations(movie_id, cosine_sim_matrix, df, top_n=10):
+    # Check if the movie exists in the dataset
+    if movie_id not in df['tconst'].values:
+        print(f"Movie {movie_id} not found in the dataset.")
+        return pd.DataFrame()
+```
+
+-   The function takes four parameters: `movie_id` (the movie identifier you want recommendations for), `cosine_sim_matrix` (the pre-calculated similarity matrix), `df` (the movie dataframe), and `top_n` (how many recommendations to return, defaulting to 10).
+-   It first checks if the requested movie exists in the dataset by looking for the movie_id in the 'tconst' column. If not found, it prints an error message and returns an empty dataframe.
+
+### 2. Finding the Movie Index
+```python
+def get_recommendations(movie_id, cosine_sim_matrix, df, top_n=10):
+    # Check if the movie exists in the dataset
+    if movie_id not in df['tconst'].values:
+        print(f"Movie {movie_id} not found in the dataset.")
+        return pd.DataFrame()
+```
+-   This line finds the index position of the target movie in the dataframe.
+-   `df['tconst'] == movie_id` creates a boolean mask where True indicates rows matching the movie_id.
+-   `df.index[...]` gets the index labels where the condition is True.
+-   `.tolist()[0]` converts the result to a list and takes the first (and presumably only) matching index.
+
+### 3. Extracting Similarity Scores
+```python
+# Get similarity scores for all movies with the target movie
+sim_scores = list(enumerate(cosine_sim_matrix[idx]))
+```
+-   `cosine_sim_matrix[idx]` retrieves the row from the similarity matrix corresponding to our target movie. This row contains similarity scores between the target movie and all other movies.
+-   `enumerate(...)` pairs each similarity score with its position index (0, 1, 2, etc.).
+-   `list(...)` converts the enumeration into a list of tuples like `[(0, 0.5), (1, 0.8), ...]` where each tuple contains (movie_index, similarity_score).
+
+### 4.  Sorting by Similarity
+
+```python
+# Sort movies based on similarity scores
+sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+```
+
+-   This sorts all the (index, score) pairs by the similarity score (the second element of each tuple, accessed with `x[1]`).
+-   `reverse=True` ensures the sorting is in descending order (highest similarity first).
+
+
+### 5. Selecting Top Similar Movies
+
+```python
+# Get the scores of the top_n most similar movies (excluding the movie itself)
+sim_scores = sim_scores[1:top_n+1]
+```
+
+-   `sim_scores[1:top_n+1]` slices the sorted list to get only the top N similar movies.
+-   It starts from index 1 (not 0) because index 0 would be the movie itself (which always has a perfect similarity score of 1.0 with itself).
+
+### 6. Extracting Recommendation Indices
+
+```python
+# Get the indices of recommended movies
+recommended_indices = [i[0] for i in sim_scores]
+```
+
+
+-   This uses a list comprehension to extract just the movie indices from the (index, score) pairs.
+-   `i[0]` gets the first element of each tuple, which is the index position of the recommended movie.
+
+### 7. Preparing and Returning Results
+
+```python
+# Return the top N movies
+columns_to_return = ['tconst', 'genres', 'startYear', 'averageRating', 
+                     'runtimeMinutes', 'directors', 'tags']
+columns_to_return = [col for col in columns_to_return if col in df.columns]
+
+return df.iloc[recommended_indices][columns_to_return]
+```
+-   First, it defines which columns to include in the recommendations.
+-   Then it filters this list to only include columns that actually exist in the dataframe (preventing errors if some columns are missing).
+-   Finally, it uses `df.iloc[recommended_indices]` to select rows by their integer positions, and then filters to only include the desired columns.
+-   The result is a dataframe containing the top N most similar movies with their details.
+
+This function efficiently uses the pre-calculated cosine similarity matrix to find movies most similar to the requested one, based on whatever features were used to create that similarity matrix (likely text features like plot descriptions, genres, tags, etc.).
+
+cell 7:
+
+```python
+# Display more information about the recommendations
+if not recommendations.empty:
+    print("\nRecommendations Details:")
+    print("=" * 50)
+    for i, (_, row) in enumerate(recommendations.iterrows(), 1):
+        title = row.get('primaryTitle', 'N/A')
+        year = row.get('startYear', 'N/A')
+        genres = str(row.get('genres', 'N/A')).strip("[]").replace(',', ', ')
+        rating = row.get('averageRating', 'N/A')
+        runtime = row.get('runtimeMinutes', 'N/A')
+
+        print(f"{i}. {title} ({year}) - {genres}")
+        print(f"   Rating: {rating}/10 | Runtime: {runtime} min")
+        print("-" * 50)
+else:
+    print("No recommendations found.")
+
+```
+
 
 # 5. Hybrid Filtering
 
