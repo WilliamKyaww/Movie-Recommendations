@@ -589,6 +589,57 @@ else:
 
 ```
 
+Alternatively, we can design an interactive function that retrieves movies similar to a given movie ID, seamlessly integrating both display and calculation. This approach enhances efficiency for large datasets by computing similarity on demand.
+
+```python
+# Function to find similar movies for any user input
+def find_similar_movies(movie_id, df=df_movie, tfidf_matrix=tfidf_matrix, top_n=10):
+
+    if movie_id not in df['tconst'].values:
+        print(f"Movie {movie_id} not found in the dataset.")
+        return pd.DataFrame()
+    
+    # Get the movie index
+    idx = df.index[df['tconst'] == movie_id].tolist()[0]
+    
+    # Get the TF-IDF vector for the selected movie
+    movie_vector = tfidf_matrix[idx:idx+1]
+    
+    # Calculate similarity with all movies
+    sim_scores = cosine_similarity(movie_vector, tfidf_matrix).flatten()
+    
+    # Get indices of top similar movies (excluding itself)
+    sim_indices = sim_scores.argsort()[:-(top_n+1):-1][1:]
+    
+    # Display information about the selected movie
+    movie_info = df[df['tconst'] == movie_id].iloc[0]
+    print(f"\nSelected movie details:")
+    print(f"Title: {movie_info.get('primaryTitle', 'N/A')}")
+    print(f"Genres: {movie_info.get('genres', 'N/A')}")
+    print(f"Year: {movie_info.get('startYear', 'N/A')}")
+    print(f"Rating: {movie_info.get('averageRating', 'N/A')}")
+    print(f"Runtime: {movie_info.get('runtimeMinutes', 'N/A')} minutes")
+    print(f"Directors: {movie_info.get('directors', 'N/A')}")
+    print(f"Tags: {movie_info.get('tags', 'N/A')}")
+    
+    # Return the top N movies
+    columns_to_return = ['tconst', 'primaryTitle', 'genres', 'startYear', 'averageRating', 'runtimeMinutes', 'directors', 'tags']
+    columns_to_return = [col for col in columns_to_return if col in df.columns]
+    
+    return df.iloc[sim_indices][columns_to_return]
+
+# Example
+another_movie_id = 'tt0004972'  # Can replace with any movie ID from dataset
+print(f"Finding recommendations for movie: {another_movie_id}")
+
+# Get recommendations
+recommendations = find_similar_movies(another_movie_id)
+
+print("\nTop recommended movies:")
+display(recommendations)
+
+```
+
 
 # 5. Hybrid Filtering
 
